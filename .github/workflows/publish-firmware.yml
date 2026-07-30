@@ -1,0 +1,74 @@
+name: publish-firmware
+
+# Runs after release-please. workflow_run fires even when the upstream tag/
+# release was created with GITHUB_TOKEN (unlike `push: tags` / `release`).
+# The "was a release cut?" decision comes from release-please's state artifact,
+# so re-running this workflow after a transient build failure still publishes.
+on:
+  workflow_run:
+    workflows: [release-please]
+    types: [completed]
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  check:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.read.outputs.release_created }}
+      tag_name: ${{ steps.read.outputs.tag_name }}
+    steps:
+      - name: Download release state
+        uses: actions/download-artifact@v4
+        with:
+          name: release-state
+          path: release-state
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - id: read
+        run: |
+          echo "release_created=$(cat release-state/release_created)" >> "$GITHUB_OUTPUT"
+          echo "tag_name=$(cat release-state/tag_name)" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: check
+    if: needs.check.outputs.release_created == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        env: [esp32-s3, esp32dev, esp32-c3, esp32-s2, lolin_s2_mini]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.check.outputs.tag_name }} # build the exact released commit
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.platformio
+            ~/.cache/pip
+          key: pio-${{ runner.os }}-${{ hashFiles('platformio.ini') }}
+          restore-keys: pio-${{ runner.os }}-
+
+      - name: Install PlatformIO
+        run: pip install --upgrade platformio
+
+      - name: Build ${{ matrix.env }}
+        run: pio run -e ${{ matrix.env }}
+
+      - name: Attach firmware to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bin="esp-visca-proxy-${{ matrix.env }}.bin"
+          cp ".pio/build/${{ matrix.env }}/firmware.bin" "$bin"
+          gh release upload "${{ needs.check.outputs.tag_name }}" "$bin" --clobber

@@ -1,0 +1,34 @@
+name: release-please
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - id: rp
+        uses: googleapis/release-please-action@v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      # Persist whether a release was cut (and its tag) so the decoupled
+      # publish workflow can act on it — and re-read it on any re-run. State
+      # lives in the artifact, not an ephemeral job output.
+      - name: Write release state
+        run: |
+          mkdir -p release-state
+          echo "${{ steps.rp.outputs.release_created || 'false' }}" > release-state/release_created
+          echo "${{ steps.rp.outputs.tag_name }}" > release-state/tag_name
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-state
+          path: release-state/
+          retention-days: 90
