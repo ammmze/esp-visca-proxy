@@ -82,15 +82,61 @@ $$("[data-power]").forEach((btn) => {
 
 // ---- presets ----
 const grid = $("#presetgrid");
-for (let i = 1; i <= 12; i++) {
-  const b = document.createElement("button");
-  b.textContent = i;
-  b.onclick = () => {
-    const op = document.querySelector('input[name="pmode"]:checked').value;
-    api("/api/preset", { op, id: i });
-  };
-  grid.appendChild(b);
+
+function renderPresetGrid(count, names) {
+  grid.innerHTML = "";
+  for (let i = 1; i <= count; i++) {
+    const b = document.createElement("button");
+    b.textContent = names[i - 1] || i; // label falls back to the number
+    b.title = "Preset " + i;
+    b.onclick = () => {
+      const op = document.querySelector('input[name="pmode"]:checked').value;
+      api("/api/preset", { op, id: i });
+    };
+    grid.appendChild(b);
+  }
 }
+
+function renderPresetEditor(count, names) {
+  $("#presetCount").value = count;
+  const list = $("#presetNameList");
+  list.innerHTML = "";
+  for (let i = 1; i <= count; i++) {
+    const label = document.createElement("label");
+    label.textContent = "Preset " + i + " ";
+    const inp = document.createElement("input");
+    inp.type = "text";
+    inp.value = names[i - 1] || "";
+    inp.placeholder = "(unnamed)";
+    label.appendChild(inp);
+    list.appendChild(label);
+  }
+}
+
+const collectNames = () =>
+  Array.from($$("#presetNameList input")).map((inp) => inp.value.trim());
+
+// Re-render name inputs when the count changes, preserving typed names.
+$("#presetCount").oninput = () => {
+  const n = Math.max(0, Math.min(64, +$("#presetCount").value || 0));
+  renderPresetEditor(n, collectNames());
+};
+
+$("#savePresets").onclick = async () => {
+  const count = Math.max(0, Math.min(64, +$("#presetCount").value || 0));
+  const names = collectNames().slice(0, count);
+  await api("/api/presets", { count, names });
+  renderPresetGrid(count, names);
+  alert("Presets saved");
+};
+
+async function loadPresets() {
+  const p = await api("/api/presets");
+  const names = p.names || [];
+  renderPresetGrid(p.count || 0, names);
+  renderPresetEditor(p.count || 0, names);
+}
+loadPresets();
 
 // ---- raw console ----
 $("#rawsend").onclick = async () => {

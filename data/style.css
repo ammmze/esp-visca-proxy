@@ -89,6 +89,10 @@ legend { color: var(--muted); font-size: .8rem; padding: 0 .3rem; }
 .mode { margin-bottom: .75rem; display: flex; gap: 1rem; }
 .mode label { display: inline; }
 
+#presetedit { margin-top: 1rem; }
+#presetedit summary { cursor: pointer; color: var(--muted); margin-bottom: .5rem; }
+#presetNameList label { display: block; }
+
 #rawhex { width: 100%; margin-bottom: .5rem; font-family: monospace; }
 pre { background: var(--panel); border: 1px solid var(--line); border-radius: .4rem; padding: .6rem; overflow: auto; font-size: .85rem; }
 

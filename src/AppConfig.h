@@ -40,6 +40,11 @@ struct AppConfig {
   int16_t statusLedPin = DEF_STATUS_LED;
   bool statusLedActiveLow = DEF_STATUS_LED_ACTIVE_LOW;
 
+  // Presets: how many preset buttons to show, plus optional custom labels
+  // stored as a JSON array string (e.g. ["Wide","Podium"]).
+  uint8_t presetCount = DEFAULT_PRESET_COUNT;
+  String presetNames = "[]";
+
   // Load from NVS (fills defaults on first boot). Returns true if a stored
   // config was found.
   bool load();
