@@ -15,6 +15,8 @@
 #define DEFAULT_VISCA_UDP_PORT 52381 // Sony VISCA-over-IP standard port
 #define DEFAULT_VISCA_ADDRESS 1      // camera address on the VISCA bus
 #define DEFAULT_SERIAL_BAUD 9600     // VISCA default; 38400 also common
+// Base names; a "-<deviceId>" suffix (from the chip MAC) is appended at runtime
+// so multiple devices get unique defaults. See AppConfig::load().
 #define DEFAULT_HOSTNAME "visca-proxy"
 #define DEFAULT_AP_SSID "ESP-VISCA-Setup"
 #define DEFAULT_AP_PASSWORD "" // empty = open AP for first-time setup

@@ -100,6 +100,7 @@ void WebServer::registerApi() {
     JsonDocument doc;
     doc["name"] = FW_NAME;
     doc["fw"] = FW_VERSION;
+    doc["id"] = AppConfig::deviceId();
     doc["source"] = SOURCE_URL; // AGPL-3.0 §13 source offer
     doc["link"] = _net->linkName();
     doc["ip"] = _net->localIP().toString();
@@ -145,7 +146,12 @@ void WebServer::registerApi() {
       "/api/config", [this](AsyncWebServerRequest *req, JsonVariant &json) {
         JsonObject o = json.as<JsonObject>();
         AppConfig &c = *_cfg;
-        if (o["hostname"].is<const char *>()) c.hostname = o["hostname"].as<String>();
+        if (o["hostname"].is<const char *>()) {
+          String v = o["hostname"].as<String>();
+          v.trim();
+          c.hostname = v.length() ? v
+                                  : String(DEFAULT_HOSTNAME) + "-" + AppConfig::deviceId();
+        }
         if (o["wifiSsid"].is<const char *>()) c.wifiSsid = o["wifiSsid"].as<String>();
         if (o["wifiPass"].is<const char *>() && o["wifiPass"].as<String>().length())
           c.wifiPass = o["wifiPass"].as<String>();
@@ -161,7 +167,12 @@ void WebServer::registerApi() {
         if (o["serialBaud"].is<uint32_t>()) c.serialBaud = o["serialBaud"];
         if (o["viscaPort"].is<uint16_t>()) c.viscaPort = o["viscaPort"];
         if (o["viscaAddress"].is<uint8_t>()) c.viscaAddress = o["viscaAddress"];
-        if (o["apSsid"].is<const char *>()) c.apSsid = o["apSsid"].as<String>();
+        if (o["apSsid"].is<const char *>()) {
+          String v = o["apSsid"].as<String>();
+          v.trim();
+          c.apSsid = v.length() ? v
+                                : String(DEFAULT_AP_SSID) + "-" + AppConfig::deviceId();
+        }
         if (o["apPass"].is<const char *>() && o["apPass"].as<String>().length())
           c.apPass = o["apPass"].as<String>();
         if (o["otaPassword"].is<const char *>() && o["otaPassword"].as<String>().length())
