@@ -36,6 +36,7 @@ jobs:
         if: steps.rp.outputs.release_created != 'true'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_REPO: ${{ github.repository }} # no checkout in this job; tell gh the repo
         run: |
           pr=$(gh pr list --state open --label "autorelease: pending" \
                  --json number --jq '.[0].number // empty')
