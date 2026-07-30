@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/ammmze/esp-visca-proxy/compare/v0.2.0...v0.3.0) (2026-07-30)
+
+
+### Features
+
+* configurable preset count with custom names ([#13](https://github.com/ammmze/esp-visca-proxy/issues/13)) ([2e23550](https://github.com/ammmze/esp-visca-proxy/commit/2e23550693fb99de0874c9e302e69a954aebac71))
+
 ## [0.2.0](https://github.com/ammmze/esp-visca-proxy/compare/v0.1.0...v0.2.0) (2026-07-30)
 
 

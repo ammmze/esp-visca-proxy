@@ -6,7 +6,7 @@
 
 // ---- Firmware identity ----------------------------------------------------
 #define FW_NAME "esp-visca-proxy"
-#define FW_VERSION "0.2.0" // x-release-please-version
+#define FW_VERSION "0.3.0" // x-release-please-version
 // AGPL-3.0 §13: this network-facing app must offer its source to users. Shown
 // as a "Source" link in the web UI — update if you fork/relocate the repo.
 #define SOURCE_URL "https://github.com/ammmze/esp-visca-proxy"
