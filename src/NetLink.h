@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // NetLink — brings up Ethernet (W5500) and/or WiFi STA, reporting which
 // link (if any) obtained connectivity. Captive-portal fallback is handled by
 // the caller when this returns Disconnected.

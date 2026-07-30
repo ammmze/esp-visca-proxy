@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "StatusLed.h"
 
 void StatusLed::begin(const AppConfig &cfg) {

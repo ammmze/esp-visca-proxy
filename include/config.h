@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // config.h — compile-time constants and per-board default pin maps.
 // All pins are runtime-overridable via AppConfig / the web UI; these are just
 // the factory defaults offered on first boot.
@@ -5,7 +6,10 @@
 
 // ---- Firmware identity ----------------------------------------------------
 #define FW_NAME "esp-visca-proxy"
-#define FW_VERSION "0.1.0"
+#define FW_VERSION "0.1.0" // x-release-please-version
+// AGPL-3.0 §13: this network-facing app must offer its source to users. Shown
+// as a "Source" link in the web UI — update if you fork/relocate the repo.
+#define SOURCE_URL "https://github.com/ammmze/esp-visca-proxy"
 
 // ---- Network / protocol defaults ------------------------------------------
 #define DEFAULT_VISCA_UDP_PORT 52381 // Sony VISCA-over-IP standard port

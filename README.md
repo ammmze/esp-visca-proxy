@@ -51,3 +51,23 @@ Environments: `esp32-s3`, `esp32dev`, `esp32-c3`, `esp32-s2`.
 See [CLAUDE.md](CLAUDE.md) for layout and conventions. Web assets live in
 `data/` and are gzipped into `src/web_assets.h` at build time by
 `scripts/embed_assets.py` — never edit the generated header.
+
+## License
+
+Licensed under the **GNU Affero General Public License v3.0 or later**
+(AGPL-3.0-or-later) — see [LICENSE](LICENSE). This is required because the
+firmware links the AGPL-licensed [ElegantOTA](https://github.com/ayushsharma82/ElegantOTA)
+library; the whole distributed image is therefore AGPL.
+
+Because the device serves a web UI, AGPL §13 applies: if you modify and deploy
+it, you must offer users the corresponding source. Update `SOURCE_URL` in
+[include/config.h](include/config.h) to point at your published source — it is
+surfaced as the "Source" link in the web UI.
+
+> Note: AGPL-3.0 permits commercial use. If you need to prohibit commercial use,
+> that requires replacing the AGPL dependency (ElegantOTA) and applying a
+> source-available license such as PolyForm Noncommercial.
+
+Bundled third-party libraries retain their own licenses: ArduinoJson (MIT),
+AsyncTCP & ESPAsyncWebServer (LGPL-3.0), ElegantOTA (AGPL-3.0), and the
+Arduino-ESP32 core (LGPL-2.1 / Apache-2.0).

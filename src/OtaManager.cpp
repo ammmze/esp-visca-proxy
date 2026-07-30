@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "OtaManager.h"
 #include <ArduinoOTA.h>
 #include <ElegantOTA.h>

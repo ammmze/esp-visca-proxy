@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // AppConfig — persistent runtime configuration stored in NVS (Preferences).
 #pragma once
 

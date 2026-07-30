@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // StatusLed — non-blocking onboard-LED indicator.
 //   Boot/connecting: fast blink · Captive portal: slow blink · Online: solid,
 //   with a brief flicker on VISCA activity.

@@ -95,3 +95,12 @@ pre { background: var(--panel); border: 1px solid var(--line); border-radius: .4
 .danger { margin-top: 1rem; display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
 .danger a { color: var(--accent); }
 #factory { background: #5a2323; }
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  color: var(--muted);
+  font-size: .78rem;
+  border-top: 1px solid var(--line);
+}
+footer a { color: var(--accent); text-decoration: none; }

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // ViscaSerial — UART link to the MAX3232/RS232 camera plus VISCA frame I/O and
 // command builders used by the web UI.
 #pragma once

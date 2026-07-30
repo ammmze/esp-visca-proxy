@@ -135,6 +135,8 @@ async function loadStatus() {
   const badge = $("#linkbadge");
   badge.textContent = s.captive ? "setup mode" : s.link + " · " + s.ip;
   badge.classList.toggle("online", s.link && s.link !== "offline");
+  if (s.source) $("#srclink").href = s.source;
+  if (s.fw) $("#fwver").textContent = s.name + " v" + s.fw;
 }
 $("#refresh").onclick = loadStatus;
 

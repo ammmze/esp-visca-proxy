@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 #include "WebServer.h"
 #include <AsyncJson.h>
 #include <ArduinoJson.h>
@@ -99,6 +100,7 @@ void WebServer::registerApi() {
     JsonDocument doc;
     doc["name"] = FW_NAME;
     doc["fw"] = FW_VERSION;
+    doc["source"] = SOURCE_URL; // AGPL-3.0 §13 source offer
     doc["link"] = _net->linkName();
     doc["ip"] = _net->localIP().toString();
     doc["captive"] = _captive;

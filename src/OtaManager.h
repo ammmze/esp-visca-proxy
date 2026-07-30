@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // OtaManager — ArduinoOTA (espota, dev pushes) + ElegantOTA (browser upload at
 // /update on the shared async web server).
 #pragma once

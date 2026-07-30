@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // CaptivePortal — SoftAP + DNS wildcard so any hostname resolves to the device,
 // used for first-time / offline configuration. The web server serves the same
 // UI; this just provides AP + DNS and OS captive-portal detection redirects.

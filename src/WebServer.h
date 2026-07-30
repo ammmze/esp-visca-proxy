@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
 // WebServer — serves the embedded SPA and the JSON control/config API. Exposes
 // the underlying AsyncWebServer so OTA can mount onto the same instance.
 #pragma once

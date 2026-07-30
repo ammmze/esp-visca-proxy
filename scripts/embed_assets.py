@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: AGPL-3.0-or-later
 """PlatformIO pre-build script: gzip every file under data/ into a single
 PROGMEM header (src/web_assets.h) so the web UI ships inside the firmware and a
 single OTA updates everything. Never edit web_assets.h by hand."""
