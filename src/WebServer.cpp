@@ -250,6 +250,33 @@ void WebServer::registerApi() {
       });
   _server.addHandler(presetHandler);
 
+  // Preset config: how many buttons + their custom labels. Saved without a
+  // reboot (unlike /api/config).
+  _server.on("/api/presets", HTTP_GET, [this](AsyncWebServerRequest *req) {
+    JsonDocument doc;
+    doc["count"] = _cfg->presetCount;
+    doc["names"] = serialized(_cfg->presetNames); // embed stored JSON array
+    sendJson(req, 200, doc);
+  });
+  auto *presetsCfgHandler = new AsyncCallbackJsonWebHandler(
+      "/api/presets", [this](AsyncWebServerRequest *req, JsonVariant &json) {
+        JsonObject o = json.as<JsonObject>();
+        AppConfig &c = *_cfg;
+        if (o["count"].is<int>()) {
+          int n = o["count"];
+          n = n < 0 ? 0 : (n > 64 ? 64 : n); // VISCA preset ids stay within 0x7F
+          c.presetCount = (uint8_t)n;
+        }
+        if (o["names"].is<JsonArray>()) {
+          String s;
+          serializeJson(o["names"], s);
+          c.presetNames = s;
+        }
+        c.save();
+        sendOk(req); // no reboot needed
+      });
+  _server.addHandler(presetsCfgHandler);
+
   // Raw VISCA passthrough (returns the reply as hex)
   auto *rawHandler = new AsyncCallbackJsonWebHandler(
       "/api/visca/raw", [this](AsyncWebServerRequest *req, JsonVariant &json) {

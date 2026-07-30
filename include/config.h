@@ -14,6 +14,7 @@
 // ---- Network / protocol defaults ------------------------------------------
 #define DEFAULT_VISCA_UDP_PORT 52381 // Sony VISCA-over-IP standard port
 #define DEFAULT_VISCA_ADDRESS 1      // camera address on the VISCA bus
+#define DEFAULT_PRESET_COUNT 6       // preset buttons shown in the web UI
 #define DEFAULT_SERIAL_BAUD 9600     // VISCA default; 38400 also common
 // Base names; a "-<deviceId>" suffix (from the chip MAC) is appended at runtime
 // so multiple devices get unique defaults. See AppConfig::load().

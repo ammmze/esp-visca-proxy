@@ -47,6 +47,9 @@ bool AppConfig::load() {
   statusLedPin = p.getShort("ledPin", statusLedPin);
   statusLedActiveLow = p.getBool("ledInv", statusLedActiveLow);
 
+  presetCount = p.getUChar("presetCount", presetCount);
+  presetNames = p.getString("presetNames", presetNames);
+
   p.end();
   return exists;
 }
@@ -80,6 +83,9 @@ void AppConfig::save() const {
 
   p.putShort("ledPin", statusLedPin);
   p.putBool("ledInv", statusLedActiveLow);
+
+  p.putUChar("presetCount", presetCount);
+  p.putString("presetNames", presetNames);
 
   p.end();
 }

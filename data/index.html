@@ -67,6 +67,14 @@
         <label><input type="radio" name="pmode" value="set"> Set</label>
       </div>
       <div id="presetgrid" class="grid"></div>
+      <details id="presetedit">
+        <summary>Configure presets</summary>
+        <label>Number of presets
+          <input type="number" id="presetCount" min="0" max="64">
+        </label>
+        <div id="presetNameList"></div>
+        <button id="savePresets">Save presets</button>
+      </details>
     </section>
 
     <!-- CONSOLE -->
