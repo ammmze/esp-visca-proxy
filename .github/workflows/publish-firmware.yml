@@ -42,7 +42,7 @@ jobs:
       matrix:
         env: [esp32-s3, esp32dev, esp32-c3, esp32-s2, lolin_s2_mini]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ needs.check.outputs.tag_name }} # build the exact released commit
 
