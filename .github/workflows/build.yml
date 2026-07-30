@@ -40,7 +40,7 @@ jobs:
           cp ".pio/build/${{ matrix.env }}/firmware.bin" "dist/esp-visca-proxy-${{ matrix.env }}.bin"
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: firmware-${{ matrix.env }}
           path: dist/*.bin
