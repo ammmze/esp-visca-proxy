@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VISCA Proxy</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <h1>VISCA Proxy</h1>
+    <span id="linkbadge" class="badge">…</span>
+  </header>
+
+  <nav id="tabs">
+    <button data-tab="control" class="active">Control</button>
+    <button data-tab="presets">Presets</button>
+    <button data-tab="console">Console</button>
+    <button data-tab="settings">Settings</button>
+    <button data-tab="status">Status</button>
+  </nav>
+
+  <main>
+    <!-- CONTROL -->
+    <section id="control" class="tab active">
+      <div class="pad">
+        <button data-pan="left" data-tilt="up">↖</button>
+        <button data-pan="none" data-tilt="up">↑</button>
+        <button data-pan="right" data-tilt="up">↗</button>
+        <button data-pan="left" data-tilt="none">←</button>
+        <button id="home" class="home">⌂</button>
+        <button data-pan="right" data-tilt="none">→</button>
+        <button data-pan="left" data-tilt="down">↙</button>
+        <button data-pan="none" data-tilt="down">↓</button>
+        <button data-pan="right" data-tilt="down">↘</button>
+      </div>
+
+      <label>Pan speed <input type="range" id="panSpeed" min="1" max="24" value="12"><span id="panSpeedV">12</span></label>
+      <label>Tilt speed <input type="range" id="tiltSpeed" min="1" max="20" value="10"><span id="tiltSpeedV">10</span></label>
+
+      <div class="row">
+        <fieldset>
+          <legend>Zoom</legend>
+          <button data-zoom="wide">Wide −</button>
+          <button data-zoom="tele">Tele +</button>
+          <label>Speed <input type="range" id="zoomSpeed" min="0" max="7" value="4"></label>
+        </fieldset>
+        <fieldset>
+          <legend>Focus</legend>
+          <button data-focus="near">Near</button>
+          <button data-focus="far">Far</button>
+          <button data-focusauto="1">Auto</button>
+          <button data-focusauto="0">Manual</button>
+        </fieldset>
+        <fieldset>
+          <legend>Power</legend>
+          <button data-power="1">On</button>
+          <button data-power="0">Off</button>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- PRESETS -->
+    <section id="presets" class="tab">
+      <div class="mode">
+        <label><input type="radio" name="pmode" value="recall" checked> Recall</label>
+        <label><input type="radio" name="pmode" value="set"> Set</label>
+      </div>
+      <div id="presetgrid" class="grid"></div>
+    </section>
+
+    <!-- CONSOLE -->
+    <section id="console" class="tab">
+      <p>Send raw VISCA (hex, e.g. <code>81 09 04 00 FF</code>):</p>
+      <input type="text" id="rawhex" placeholder="81 09 04 00 FF">
+      <button id="rawsend">Send</button>
+      <pre id="rawout"></pre>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="settings" class="tab">
+      <form id="cfgform">
+        <fieldset><legend>Network</legend>
+          <label>Hostname <input name="hostname"></label>
+          <label>WiFi SSID <input name="wifiSsid"></label>
+          <label>WiFi Password <input name="wifiPass" type="password" placeholder="(unchanged)"></label>
+          <label><input name="ethEnabled" type="checkbox"> Enable Ethernet (W5500)</label>
+        </fieldset>
+        <fieldset><legend>W5500 pins</legend>
+          <label>SCK <input name="ethSck" type="number"></label>
+          <label>MISO <input name="ethMiso" type="number"></label>
+          <label>MOSI <input name="ethMosi" type="number"></label>
+          <label>CS <input name="ethCs" type="number"></label>
+          <label>INT <input name="ethInt" type="number"></label>
+          <label>RST <input name="ethRst" type="number"></label>
+        </fieldset>
+        <fieldset><legend>Serial / VISCA</legend>
+          <label>UART TX <input name="uartTx" type="number"></label>
+          <label>UART RX <input name="uartRx" type="number"></label>
+          <label>Baud
+            <select name="serialBaud">
+              <option value="9600">9600</option>
+              <option value="38400">38400</option>
+            </select>
+          </label>
+          <label>VISCA UDP port <input name="viscaPort" type="number"></label>
+          <label>Camera address <input name="viscaAddress" type="number" min="1" max="7"></label>
+        </fieldset>
+        <fieldset><legend>Access point / OTA</legend>
+          <label>AP SSID <input name="apSsid"></label>
+          <label>AP Password <input name="apPass" type="password" placeholder="(unchanged)"></label>
+          <label>OTA Password <input name="otaPassword" type="password" placeholder="(unchanged)"></label>
+        </fieldset>
+        <fieldset><legend>Status LED</legend>
+          <label>LED pin (−1 = disabled) <input name="statusLedPin" type="number" min="-1"></label>
+          <label><input name="statusLedActiveLow" type="checkbox"> Active low (inverted)</label>
+        </fieldset>
+        <button type="submit">Save &amp; Reboot</button>
+      </form>
+      <div class="danger">
+        <a href="/update">Firmware update (OTA)</a>
+        <button id="reboot">Reboot</button>
+        <button id="factory">Factory reset</button>
+      </div>
+    </section>
+
+    <!-- STATUS -->
+    <section id="status" class="tab">
+      <pre id="statusout">…</pre>
+      <button id="refresh">Refresh</button>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

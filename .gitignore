@@ -1,0 +1,10 @@
+.pio/
+.vscode/
+.claude/settings.local.json
+
+# Generated web asset header
+src/web_assets.h
+
+# OS / editor cruft
+.DS_Store
+*.swp
