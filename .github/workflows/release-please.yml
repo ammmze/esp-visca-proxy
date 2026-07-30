@@ -5,30 +5,43 @@ on:
     branches: [main]
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read # writes are done via the GitHub App token below
 
 jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
+      # A GitHub App token (not GITHUB_TOKEN) so the release PR — and its tag —
+      # trigger required CI checks and downstream tag workflows. GITHUB_TOKEN
+      # actions never trigger other workflows.
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          client-id: ${{ secrets.RELEASE_PLEASE_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_PLEASE_PRIVATE_KEY }}
+
       - id: rp
         uses: googleapis/release-please-action@v5
         with:
+          token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-      # Persist whether a release was cut (and its tag) so the decoupled
-      # publish workflow can act on it — and re-read it on any re-run. State
-      # lives in the artifact, not an ephemeral job output.
-      - name: Write release state
+      # Keep the open release PR current with main. release-please only rebases
+      # its PR when the release *content* changes, so merges it ignores (e.g.
+      # Renovate chore(deps), hidden from the changelog) leave the PR "behind" —
+      # which the "require branches up to date" rule then blocks. Using the app
+      # token means the resulting commit re-triggers the required checks.
+      - name: Update release PR branch
+        if: steps.rp.outputs.release_created != 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          mkdir -p release-state
-          echo "${{ steps.rp.outputs.release_created || 'false' }}" > release-state/release_created
-          echo "${{ steps.rp.outputs.tag_name }}" > release-state/tag_name
-
-      - uses: actions/upload-artifact@v7
-        with:
-          name: release-state
-          path: release-state/
-          retention-days: 90
+          pr=$(gh pr list --state open --label "autorelease: pending" \
+                 --json number --jq '.[0].number // empty')
+          if [ -n "$pr" ]; then
+            echo "Updating release PR #$pr branch with main"
+            gh pr update-branch "$pr" || echo "already up to date (or nothing to update)"
+          else
+            echo "No open release PR to update"
+          fi
