@@ -6,12 +6,22 @@ AppConfig g_config;
 
 static const char *NVS_NAMESPACE = "visca";
 
+String AppConfig::deviceId() {
+  uint64_t mac = ESP.getEfuseMac();
+  char buf[7];
+  snprintf(buf, sizeof(buf), "%02x%02x%02x", (uint8_t)(mac >> 16),
+           (uint8_t)(mac >> 8), (uint8_t)mac);
+  return String(buf);
+}
+
 bool AppConfig::load() {
   Preferences p;
   p.begin(NVS_NAMESPACE, true); // read-only
   bool exists = p.isKey("hostname");
 
-  hostname = p.getString("hostname", hostname);
+  // Device-unique defaults so multiple fresh units don't collide on the network.
+  String did = deviceId();
+  hostname = p.getString("hostname", String(DEFAULT_HOSTNAME) + "-" + did);
   wifiSsid = p.getString("wifiSsid", wifiSsid);
   wifiPass = p.getString("wifiPass", wifiPass);
   ethEnabled = p.getBool("ethEnabled", ethEnabled);
@@ -30,7 +40,7 @@ bool AppConfig::load() {
   viscaPort = p.getUShort("viscaPort", viscaPort);
   viscaAddress = p.getUChar("viscaAddr", viscaAddress);
 
-  apSsid = p.getString("apSsid", apSsid);
+  apSsid = p.getString("apSsid", String(DEFAULT_AP_SSID) + "-" + did);
   apPass = p.getString("apPass", apPass);
   otaPassword = p.getString("otaPass", otaPassword);
 

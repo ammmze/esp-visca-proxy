@@ -48,6 +48,10 @@ struct AppConfig {
   // Wipe stored config back to defaults.
   static void reset();
 
+  // Short, stable per-chip id (6 lowercase hex from the factory MAC). Used to
+  // make the default hostname / AP SSID unique across devices.
+  static String deviceId();
+
   bool hasWifiCreds() const { return wifiSsid.length() > 0; }
 };
 
